@@ -22,29 +22,34 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __HELLOWORLD_SCENE_H__
-#define __HELLOWORLD_SCENE_H__
+#ifndef __RING_H__
+#define __RING_H__
 
-#include <memory>
-#include <vector>
 #include "cocos2d.h"
-#include "Ring.h"
 
-class HelloWorld : public cocos2d::Scene {
-private:
-	bool isTouchDown = false;
-	float initialTouchPos[2];
-	float currentTouchPos[2];
+class Ring : public cocos2d::Node {
+protected:
+	bool selected;
+	short direction;
+	cocos2d::Sprite* ring;
 
-	std::vector<std::shared_ptr<Ring>> rings;
+	Ring();
 
 public:
 	// implement the "static create()" method manually
-	CREATE_FUNC(HelloWorld);
-	virtual bool init();
+	CREATE_FUNC(Ring);
+	virtual ~Ring();
 
-	static cocos2d::Scene* createScene();
+	virtual bool init() override;
+
+	bool getSelected() const { return selected; }
+	void setSelected(bool selected) { this->selected = selected; }
+
+	void rotateLeft();
+	void rotateRight();
+
+	virtual void update(float dt) override;
 };
 
-#endif // __HELLOWORLD_SCENE_H__
+#endif // __RING_H__
 
