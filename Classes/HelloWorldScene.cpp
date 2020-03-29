@@ -64,12 +64,15 @@ bool HelloWorld::init() {
 		this->addChild(label, 1);
 	}
 
-	{
-		constexpr float BORDER_WIDTH = 50.0f;
-		constexpr float BORDER_HEIGHT = 50.0f;
+	constexpr float BORDER_WIDTH = 50.0f;
+	constexpr float BORDER_HEIGHT = 50.0f;
+	constexpr float SPACING = 384.0f;
 
+	{
 		auto ring = Ring::create();
 		ring->setPosition(Vec2(768.0f, 1024.0f));
+		ring->addArmAt(true, 0);
+		ring->addArmAt(false, 2);
 		this->addChild(ring);
 
 		rings.push_back(std::shared_ptr<Ring>(ring));
@@ -77,7 +80,9 @@ bool HelloWorld::init() {
 
 	{
 		auto ring = Ring::create();
-		ring->setPosition(Vec2(1024.0f, 1024.0f));
+		ring->setPosition(Vec2(1152.0f, 1024.0f));
+		ring->addArmAt(false, 1);
+		ring->addArmAt(true, 3);
 		this->addChild(ring);
 
 		rings.push_back(std::shared_ptr<Ring>(ring));
@@ -95,12 +100,10 @@ bool HelloWorld::init() {
   // triggered when pressed
   touchListener->onTouchBegan = [&](Touch* touch, Event* event) -> bool {
 		for (auto& ring : rings) {
-			if (ring->getBoundingBox().containsPoint(touch->getLocation())) {
-				Rect leftRect(ring->getBoundingBox().getMinX(), ring->getBoundingBox().getMinY(), ring->getBoundingBox().getMidX() - ring->getBoundingBox().getMinX(), ring->getBoundingBox().getMaxY() - ring->getBoundingBox().getMinY());
-				Rect rightRect(ring->getBoundingBox().getMidX(), ring->getBoundingBox().getMinY(), ring->getBoundingBox().getMaxX() - ring->getBoundingBox().getMidX(), ring->getBoundingBox().getMaxY() - ring->getBoundingBox().getMinY());
-
-				//const float dx = ring->getBoundingBox().getMidX();
-				//const float dy = ring->getBoundingBox().getMidY();
+			Rect ringbox = ring->getBoundingBox();
+			if (ringbox.containsPoint(touch->getLocation())) {
+				Rect leftRect(ringbox.getMinX(), ringbox.getMinY(), ringbox.getMidX() - ringbox.getMinX(), ringbox.getMaxY() - ringbox.getMinY());
+				Rect rightRect(ringbox.getMidX(), ringbox.getMinY(), ringbox.getMaxX() - ringbox.getMidX(), ringbox.getMaxY() - ringbox.getMinY());
 
 				if (leftRect.containsPoint(touch->getLocation())) {
 					ring->rotateLeft();

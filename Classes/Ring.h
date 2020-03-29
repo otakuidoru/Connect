@@ -29,7 +29,8 @@
 
 class Ring : public cocos2d::Node {
 protected:
-	bool selected;
+	constexpr static float ROTATE_SPEED = 0.5f;
+
 	short direction;
 	cocos2d::Sprite* ring;
 
@@ -42,8 +43,9 @@ public:
 
 	virtual bool init() override;
 
-	bool getSelected() const { return selected; }
-	void setSelected(bool selected) { this->selected = selected; }
+	short getDirection() const { return direction; }
+
+	void addArmAt(const bool positive, const short direction);
 
 	void rotateLeft();
 	void rotateRight();

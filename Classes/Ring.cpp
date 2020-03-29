@@ -51,7 +51,6 @@ bool Ring::init() {
 		return false;
 	}
 
-	this->selected = false;
 	this->direction = 0;
 
 	auto turnButtons = Sprite::create("left_right.png");
@@ -61,18 +60,6 @@ bool Ring::init() {
 	this->ring = Sprite::create("ring.png");
 	this->ring->setPositionNormalized(Vec2(0.5f, 0.5f));
 	this->addChild(this->ring);
-
-  auto femaleCoupling = Sprite::create("female_coupling.png");
-  femaleCoupling->setPositionNormalized(Vec2(0.5f, 0.5f));
-  femaleCoupling->setAnchorPoint(Vec2(0, 0.5f));
-  femaleCoupling->setRotation(0.0f);
-  this->ring->addChild(femaleCoupling);
-
-  auto maleCoupling = Sprite::create("male_coupling.png");
-  maleCoupling->setPositionNormalized(Vec2(0.5f, 0.5f));
-  maleCoupling->setAnchorPoint(Vec2(0, 0.5f));
-  maleCoupling->setRotation(90.0f);
-  this->ring->addChild(maleCoupling);
 
 	this->setContentSize(this->ring->getContentSize());
 	this->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -85,6 +72,37 @@ bool Ring::init() {
 /**
  *
  */
+void Ring::addArmAt(const bool positive, const short direction) {
+	Sprite* coupling = nullptr;
+	if (positive) {
+		coupling = Sprite::create("male_coupling.png");
+	} else {
+		coupling = Sprite::create("female_coupling.png");
+	}
+	coupling->setPositionNormalized(Vec2(0.5f, 0.5f));
+	coupling->setAnchorPoint(Vec2(0, 0.5f));
+
+	switch (direction) {
+		case 0: {
+			coupling->setRotation(0.0f);
+		} break;
+		case 1: {
+			coupling->setRotation(90.0f);
+		} break;
+		case 2: {
+			coupling->setRotation(180.0f);
+		} break;
+		case 3: {
+			coupling->setRotation(270.0f);
+		} break;
+	}
+
+	this->ring->addChild(coupling);
+}
+
+/**
+ *
+ */
 void Ring::rotateLeft() {
 	this->direction = (this->direction - 1) % 4;
 	if (this->direction < 0) {
@@ -92,16 +110,16 @@ void Ring::rotateLeft() {
 	}
 	switch (this->direction) {
 		case 0: {
-			this->ring->runAction(RotateTo::create(1.0f, 0.0f));
+			this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 0.0f));
 		} break;
 		case 1: {
-			this->ring->runAction(RotateTo::create(1.0f, 90.0f));
+			this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 90.0f));
 		} break;
 		case 2: {
-			this->ring->runAction(RotateTo::create(1.0f, 180.0f));
+			this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 180.0f));
 		} break;
 		case 3: {
-			this->ring->runAction(RotateTo::create(1.0f, 270.0f));
+			this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 270.0f));
 		} break;
 	}
 }
@@ -116,16 +134,16 @@ void Ring::rotateRight() {
 	}
 	switch (this->direction) {
 		case 0: {
-			this->ring->runAction(RotateTo::create(1.0f, 0.0f));
+			this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 0.0f));
 		} break;
 		case 1: {
-			this->ring->runAction(RotateTo::create(1.0f, 90.0f));
+			this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 90.0f));
 		} break;
 		case 2: {
-			this->ring->runAction(RotateTo::create(1.0f, 180.0f));
+			this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 180.0f));
 		} break;
 		case 3: {
-			this->ring->runAction(RotateTo::create(1.0f, 270.0f));
+			this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 270.0f));
 		} break;
 	}
 }
