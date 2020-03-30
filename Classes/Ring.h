@@ -36,6 +36,8 @@ protected:
 
 	Ring();
 
+	void rotate(bool right);
+
 public:
 	// implement the "static create()" method manually
 	CREATE_FUNC(Ring);

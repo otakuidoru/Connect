@@ -104,34 +104,30 @@ void Ring::addArmAt(const bool positive, const short direction) {
  *
  */
 void Ring::rotateLeft() {
-	this->direction = (this->direction - 1) % 4;
-	if (this->direction < 0) {
-		this->direction += 4;
-	}
-	switch (this->direction) {
-		case 0: {
-			this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 0.0f));
-		} break;
-		case 1: {
-			this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 90.0f));
-		} break;
-		case 2: {
-			this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 180.0f));
-		} break;
-		case 3: {
-			this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 270.0f));
-		} break;
-	}
+	rotate(false);
 }
 
 /**
  *
  */
 void Ring::rotateRight() {
-	this->direction = (this->direction + 1) % 4;
+	rotate(true);
+}
+
+/**
+ *
+ */
+void Ring::rotate(bool right) {
+	if (right) {
+		this->direction = (this->direction + 1) % 4;
+	} else {
+		this->direction = (this->direction - 1) % 4;
+	}
+
 	if (this->direction < 0) {
 		this->direction += 4;
 	}
+
 	switch (this->direction) {
 		case 0: {
 			this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 0.0f));
