@@ -175,15 +175,15 @@ Ring* HelloWorld::createRing(std::map<std::string, std::string> properties) {
 	}
 
 	if ((itr = properties.find("arm1")) != properties.end()) {
-		ring->addArmAt(properties["arm1"].compare("-") != 0, 0);
+		ring->addArmAt(properties["arm1"].compare("-") != 0, 1);
 	}
 
 	if ((itr = properties.find("arm2")) != properties.end()) {
-		ring->addArmAt(properties["arm2"].compare("-") != 0, 0);
+		ring->addArmAt(properties["arm2"].compare("-") != 0, 2);
 	}
 
 	if ((itr = properties.find("arm3")) != properties.end()) {
-		ring->addArmAt(properties["arm3"].compare("-") != 0, 0);
+		ring->addArmAt(properties["arm3"].compare("-") != 0, 3);
 	}
 
 	this->addChild(ring);
