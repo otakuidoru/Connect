@@ -22,6 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#include <algorithm>
 #include "HelloWorldScene.h"
 
 USING_NS_CC;
@@ -68,24 +69,30 @@ bool HelloWorld::init() {
 	constexpr float BORDER_HEIGHT = 50.0f;
 	constexpr float SPACING = 384.0f;
 
+//	createRing();
+
 	{
 		auto ring = Ring::create();
-		ring->setPosition(Vec2(768.0f, 1024.0f));
+		ring->setScale(0.75f);
+		ring->setPosition(Vec2(192.0f, 192.0f));
 		ring->addArmAt(true, 0);
 		ring->addArmAt(false, 2);
 		this->addChild(ring);
 
-		rings.push_back(std::shared_ptr<Ring>(ring));
+		//rings.push_back(std::shared_ptr<Ring>(ring));
+		grid.emplace(std::make_pair(0, 0), ring);
 	}
 
 	{
 		auto ring = Ring::create();
-		ring->setPosition(Vec2(1152.0f, 1024.0f));
+		ring->setScale(0.75f);
+		ring->setPosition(Vec2(192.0f + 384.0 * 0.75f, 192.0f));
 		ring->addArmAt(false, 1);
 		ring->addArmAt(true, 3);
 		this->addChild(ring);
 
-		rings.push_back(std::shared_ptr<Ring>(ring));
+		//rings.push_back(std::shared_ptr<Ring>(ring));
+		grid.emplace(std::make_pair(1, 0), ring);
 	}
 
   /////////////////////////////////////////////////////////////////////////////
@@ -99,7 +106,10 @@ bool HelloWorld::init() {
 
   // triggered when pressed
   touchListener->onTouchBegan = [&](Touch* touch, Event* event) -> bool {
-		for (auto& ring : rings) {
+		bool consuming = false;
+
+		std::for_each(grid.begin(), grid.end(), [&](std::pair<std::pair<int, int>, std::shared_ptr<Ring>> element) {
+			Ring* ring = element.second.get();
 			Rect ringbox = ring->getBoundingBox();
 			if (ringbox.containsPoint(touch->getLocation())) {
 				Rect leftRect(ringbox.getMinX(), ringbox.getMinY(), ringbox.getMidX() - ringbox.getMinX(), ringbox.getMaxY() - ringbox.getMinY());
@@ -107,15 +117,15 @@ bool HelloWorld::init() {
 
 				if (leftRect.containsPoint(touch->getLocation())) {
 					ring->rotateLeft();
+					consuming = true;
 				} else if (rightRect.containsPoint(touch->getLocation())) {
 					ring->rotateRight();
+					consuming = true;
 				}
-
-				return true; // if you are consuming it
 			}
-		}
+		});
 
-    return false;
+    return consuming;
   };
 
   // triggered when moving touch
@@ -130,5 +140,56 @@ bool HelloWorld::init() {
   this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 
 	return true;
+}
+
+/**
+ *
+ */
+Ring* HelloWorld::createRing(std::map<std::string, std::string> properties) {
+	std::map<std::string, std::string>::iterator itr;
+
+	auto ring = Ring::create();
+	ring->setScale(0.75f);
+
+	// grid_x
+	int grid_x;
+	if ((itr = properties.find("grid_x")) != properties.end()) {
+		grid_x = std::stoi(properties["grid_x"]);
+		ring->setPositionX(192.0f + 384.0 * ring->getScale() * grid_x);
+	}
+
+	// grid_y
+	int grid_y;
+	if ((itr = properties.find("grid_y")) != properties.end()) {
+		grid_y = std::stoi(properties["grid_y"]);
+		ring->setPositionY(192.0f + 384.0 * ring->getScale() * grid_y);
+	}
+
+	// rotatable
+	if ((itr = properties.find("rotatable")) != properties.end()) {
+		ring->setRotatable(properties["rotatable"].compare("false") != 0);
+	}
+
+	if ((itr = properties.find("arm0")) != properties.end()) {
+		ring->addArmAt(properties["arm0"].compare("-") != 0, 0);
+	}
+
+	if ((itr = properties.find("arm1")) != properties.end()) {
+		ring->addArmAt(properties["arm1"].compare("-") != 0, 0);
+	}
+
+	if ((itr = properties.find("arm2")) != properties.end()) {
+		ring->addArmAt(properties["arm2"].compare("-") != 0, 0);
+	}
+
+	if ((itr = properties.find("arm3")) != properties.end()) {
+		ring->addArmAt(properties["arm3"].compare("-") != 0, 0);
+	}
+
+	this->addChild(ring);
+
+	this->grid.emplace(std::make_pair(grid_x, grid_y), ring);
+
+	return ring;
 }
 

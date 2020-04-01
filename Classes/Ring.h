@@ -31,6 +31,7 @@ class Ring : public cocos2d::Node {
 protected:
 	constexpr static float ROTATE_SPEED = 0.5f;
 
+	bool rotatable;
 	short direction;
 	cocos2d::Sprite* ring;
 
@@ -44,6 +45,9 @@ public:
 	virtual ~Ring();
 
 	virtual bool init() override;
+
+	bool isRotatable() const { return rotatable; }
+	void setRotatable(bool rotatable) { this->rotatable = rotatable; }
 
 	short getDirection() const { return direction; }
 

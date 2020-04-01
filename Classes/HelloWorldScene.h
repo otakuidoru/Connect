@@ -25,8 +25,11 @@
 #ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
 
+#include <map>
 #include <memory>
-#include <vector>
+#include <string>
+#include <utility>
+//#include <vector>
 #include "cocos2d.h"
 #include "Ring.h"
 
@@ -36,7 +39,10 @@ private:
 	float initialTouchPos[2];
 	float currentTouchPos[2];
 
-	std::vector<std::shared_ptr<Ring>> rings;
+	std::map<std::pair<int, int>, std::shared_ptr<Ring>> grid;
+//	std::vector<std::shared_ptr<Ring>> rings;
+
+	Ring* createRing(std::map<std::string, std::string> properties);
 
 public:
 	// implement the "static create()" method manually
