@@ -29,7 +29,6 @@
 #include <memory>
 #include <string>
 #include <utility>
-//#include <vector>
 #include "cocos2d.h"
 #include "Ring.h"
 
@@ -40,9 +39,8 @@ private:
 	float currentTouchPos[2];
 
 	std::map<std::pair<int, int>, std::shared_ptr<Ring>> grid;
-//	std::vector<std::shared_ptr<Ring>> rings;
 
-	Ring* createRing(std::map<std::string, std::string> properties);
+	void createRing(std::map<std::string, std::string>& properties);
 
 public:
 	// implement the "static create()" method manually

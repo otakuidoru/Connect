@@ -69,30 +69,16 @@ bool HelloWorld::init() {
 	constexpr float BORDER_HEIGHT = 50.0f;
 	constexpr float SPACING = 384.0f;
 
-//	createRing();
-
 	{
-		auto ring = Ring::create();
-		ring->setScale(0.75f);
-		ring->setPosition(Vec2(192.0f, 192.0f));
-		ring->addArmAt(true, 0);
-		ring->addArmAt(false, 2);
-		this->addChild(ring);
-
-		//rings.push_back(std::shared_ptr<Ring>(ring));
-		grid.emplace(std::make_pair(0, 0), ring);
-	}
-
-	{
-		auto ring = Ring::create();
-		ring->setScale(0.75f);
-		ring->setPosition(Vec2(192.0f + 384.0 * 0.75f, 192.0f));
-		ring->addArmAt(false, 1);
-		ring->addArmAt(true, 3);
-		this->addChild(ring);
-
-		//rings.push_back(std::shared_ptr<Ring>(ring));
-		grid.emplace(std::make_pair(1, 0), ring);
+		std::map<std::string, std::string> properties;
+		properties["grid_x"] = "0";
+		properties["grid_y"] = "1";
+		properties["rotatable"] = "1";
+		properties["arm0"] = "-";
+		properties["arm1"] = "+";
+		properties["arm2"] = "+";
+		properties["arm3"] = "-";
+		this->createRing(properties);
 	}
 
   /////////////////////////////////////////////////////////////////////////////
@@ -145,7 +131,7 @@ bool HelloWorld::init() {
 /**
  *
  */
-Ring* HelloWorld::createRing(std::map<std::string, std::string> properties) {
+void HelloWorld::createRing(std::map<std::string, std::string>& properties) {
 	std::map<std::string, std::string>::iterator itr;
 
 	auto ring = Ring::create();
@@ -189,7 +175,5 @@ Ring* HelloWorld::createRing(std::map<std::string, std::string> properties) {
 	this->addChild(ring);
 
 	this->grid.emplace(std::make_pair(grid_x, grid_y), ring);
-
-	return ring;
 }
 
