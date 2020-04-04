@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<level>
+	<rings>
+		<ring id="ring0" grid_x="0" grid_y="0" rotatable="1" arm0="-" arm2="+" arm3="-" />
+	</rings>
+</level>
+

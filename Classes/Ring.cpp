@@ -118,9 +118,9 @@ void Ring::rotateRight() {
 /**
  *
  */
-void Ring::rotate(bool right) {
+void Ring::rotate(bool rotateRight) {
 	if (this->isRotatable()) {
-		if (right) {
+		if (rotateRight) {
 			this->direction = (this->direction + 1) % 4;
 		} else {
 			this->direction = (this->direction - 1) % 4;

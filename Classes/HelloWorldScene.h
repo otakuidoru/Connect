@@ -48,6 +48,8 @@ public:
 	virtual bool init();
 
 	static cocos2d::Scene* createScene();
+
+	void update(float dt);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

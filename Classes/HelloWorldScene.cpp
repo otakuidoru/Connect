@@ -27,6 +27,8 @@
 
 USING_NS_CC;
 
+#include "audio/include/AudioEngine.h"
+
 Scene* HelloWorld::createScene() {
 	return HelloWorld::create();
 }
@@ -49,7 +51,7 @@ bool HelloWorld::init() {
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	/////////////////////////////
-	// 2. add your codes below...
+	// 2. add your code below...
 
 	// add a label shows "Hello World"
 	// create and initialize a label
@@ -75,17 +77,16 @@ bool HelloWorld::init() {
 		properties["grid_y"] = "1";
 		properties["rotatable"] = "1";
 		properties["arm0"] = "-";
-		properties["arm1"] = "+";
 		properties["arm2"] = "+";
 		properties["arm3"] = "-";
 		this->createRing(properties);
 	}
 
-  /////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   //  Create a "one by one" touch event listener (processes one touch at a time)
   //
-  /////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
 
   auto touchListener = EventListenerTouchOneByOne::create();
   touchListener->setSwallowTouches(true);
@@ -102,11 +103,40 @@ bool HelloWorld::init() {
 				Rect rightRect(ringbox.getMidX(), ringbox.getMinY(), ringbox.getMaxX() - ringbox.getMidX(), ringbox.getMaxY() - ringbox.getMinY());
 
 				if (leftRect.containsPoint(touch->getLocation())) {
+					consuming = true;
 					ring->rotateLeft();
-					consuming = true;
+
+					auto explosion = Sprite::create("explosion3.png");
+					explosion->setOpacity(0);
+					explosion->setPosition(Vec2(768.0f, 1024.0f));
+					explosion->setScale(5.0f);
+					this->addChild(explosion);
+
+					explosion->runAction(Sequence::create(
+						Spawn::create(
+							ScaleTo::create(0.75f, 0.0f),
+							FadeIn::create(0.75f),
+							nullptr
+						),
+						CallFunc::create([&]() {
+							// play the explosion noise
+							AudioEngine::play2d("boom7.wav");
+							// show the explosion
+							auto particleExplosion = ParticleExplosion::create();
+							particleExplosion->setPosition(Vec2(768.0f, 1024.0f));
+							this->addChild(particleExplosion);
+							particleExplosion->runAction(Sequence::create(
+								DelayTime::create(5.0f),
+								RemoveSelf::create(),
+								nullptr
+							));
+						}),
+						RemoveSelf::create(),
+						nullptr
+					));
 				} else if (rightRect.containsPoint(touch->getLocation())) {
-					ring->rotateRight();
 					consuming = true;
+					ring->rotateRight();
 				}
 			}
 		});
@@ -124,6 +154,8 @@ bool HelloWorld::init() {
 
   // add listener
   this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
+
+//	this->scheduleUpdate();
 
 	return true;
 }
@@ -175,5 +207,11 @@ void HelloWorld::createRing(std::map<std::string, std::string>& properties) {
 	this->addChild(ring);
 
 	this->grid.emplace(std::make_pair(grid_x, grid_y), ring);
+}
+
+/**
+ *
+ */
+void HelloWorld::update(float dt) {
 }
 
