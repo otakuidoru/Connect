@@ -29,8 +29,6 @@
 
 class Ring : public cocos2d::Node {
 protected:
-	constexpr static float ROTATE_SPEED = 0.5f;
-
 	bool rotatable;
 	short direction;
 	cocos2d::Sprite* ring;
@@ -40,6 +38,8 @@ protected:
 	void rotate(bool right);
 
 public:
+	constexpr static float ROTATION_SPEED = 0.5f;
+
 	// implement the "static create()" method manually
 	CREATE_FUNC(Ring);
 	virtual ~Ring();

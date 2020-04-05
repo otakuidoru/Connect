@@ -1,7 +1,12 @@
 <?xml version="1.0"?>
-<level>
+<level size_x="2" size_y="1">
 	<rings>
-		<ring id="ring0" grid_x="0" grid_y="0" rotatable="1" arm0="-" arm2="+" arm3="-" />
+		<ring id="ring0" x="" y="" grid_x="0" grid_y="0" rotatable="1" arm2="+" />
+		<ring id="ring1" x="" y="" grid_x="1" grid_y="0" rotatable="1" arm0="-" />
 	</rings>
+	<neighbors>
+		<neighbor node_a="ring0" node_b="ring1" />
+		<neighbor node_a="ring1" node_b="ring0" />
+	</neighbors>
 </level>
 

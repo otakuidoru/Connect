@@ -105,38 +105,23 @@ bool HelloWorld::init() {
 				if (leftRect.containsPoint(touch->getLocation())) {
 					consuming = true;
 					ring->rotateLeft();
-
-					auto explosion = Sprite::create("explosion3.png");
-					explosion->setOpacity(0);
-					explosion->setPosition(Vec2(768.0f, 1024.0f));
-					explosion->setScale(5.0f);
-					this->addChild(explosion);
-
-					explosion->runAction(Sequence::create(
-						Spawn::create(
-							ScaleTo::create(0.75f, 0.0f),
-							FadeIn::create(0.75f),
-							nullptr
-						),
+					ring->runAction(Sequence::create(
+						DelayTime::create(Ring::ROTATION_SPEED),
 						CallFunc::create([&]() {
-							// play the explosion noise
-							AudioEngine::play2d("boom7.wav");
-							// show the explosion
-							auto particleExplosion = ParticleExplosion::create();
-							particleExplosion->setPosition(Vec2(768.0f, 1024.0f));
-							this->addChild(particleExplosion);
-							particleExplosion->runAction(Sequence::create(
-								DelayTime::create(5.0f),
-								RemoveSelf::create(),
-								nullptr
-							));
+							this->checkConnections();
 						}),
-						RemoveSelf::create(),
 						nullptr
 					));
 				} else if (rightRect.containsPoint(touch->getLocation())) {
 					consuming = true;
 					ring->rotateRight();
+					ring->runAction(Sequence::create(
+						DelayTime::create(Ring::ROTATION_SPEED),
+						CallFunc::create([&]() {
+							this->checkConnections();
+						}),
+						nullptr
+					));
 				}
 			}
 		});
@@ -207,6 +192,40 @@ void HelloWorld::createRing(std::map<std::string, std::string>& properties) {
 	this->addChild(ring);
 
 	this->grid.emplace(std::make_pair(grid_x, grid_y), ring);
+}
+
+/**
+ *
+ */
+void HelloWorld::checkConnections() {
+	auto explosion = Sprite::create("explosion3.png");
+	explosion->setOpacity(0);
+	explosion->setPosition(Vec2(768.0f, 1024.0f));
+	explosion->setScale(5.0f);
+	this->addChild(explosion);
+
+	explosion->runAction(Sequence::create(
+		Spawn::create(
+			ScaleTo::create(0.75f, 0.0f),
+			FadeIn::create(0.75f),
+			nullptr
+		),
+		CallFunc::create([&]() {
+			// play the explosion noise
+			AudioEngine::play2d("boom7.wav");
+			// show the explosion
+			auto particleExplosion = ParticleExplosion::create();
+			particleExplosion->setPosition(Vec2(768.0f, 1024.0f));
+			this->addChild(particleExplosion);
+			particleExplosion->runAction(Sequence::create(
+				DelayTime::create(5.0f),
+				RemoveSelf::create(),
+				nullptr
+			));
+		}),
+		RemoveSelf::create(),
+		nullptr
+	));
 }
 
 /**

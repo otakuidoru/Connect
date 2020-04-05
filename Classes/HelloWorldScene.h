@@ -49,6 +49,8 @@ public:
 
 	static cocos2d::Scene* createScene();
 
+	void checkConnections();
+
 	void update(float dt);
 };
 

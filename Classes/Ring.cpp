@@ -132,16 +132,16 @@ void Ring::rotate(bool rotateRight) {
 
 		switch (this->direction) {
 			case 0: {
-				this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 0.0f));
+				this->ring->runAction(RotateTo::create(Ring::ROTATION_SPEED, 0.0f));
 			} break;
 			case 1: {
-				this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 90.0f));
+				this->ring->runAction(RotateTo::create(Ring::ROTATION_SPEED, 90.0f));
 			} break;
 			case 2: {
-				this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 180.0f));
+				this->ring->runAction(RotateTo::create(Ring::ROTATION_SPEED, 180.0f));
 			} break;
 			case 3: {
-				this->ring->runAction(RotateTo::create(Ring::ROTATE_SPEED, 270.0f));
+				this->ring->runAction(RotateTo::create(Ring::ROTATION_SPEED, 270.0f));
 			} break;
 		}
 	}
