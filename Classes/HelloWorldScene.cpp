@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include "HelloWorldScene.h"
+#include "tinyxml2.h"
 
 USING_NS_CC;
 
@@ -66,6 +67,20 @@ bool HelloWorld::init() {
 		// add the label as a child to this layer
 		this->addChild(label, 1);
 	}
+
+	tinyxml2::XMLDocument doc;
+	doc.LoadFile("levels/1.xml");
+
+	tinyxml2::XMLElement* root = doc.RootElement();
+	tinyxml2::XMLElement* level = doc.FirstChildElement("level");
+	unsigned int size_x = level->UnsignedAttribute("size_x");
+	unsigned int size_y = level->UnsignedAttribute("size_y");
+
+	// parse the rings
+	tinyxml2::XMLElement* rings = doc.FirstChildElement("rings");
+
+	// parse the neighbors
+	tinyxml2::XMLElement* neighbors = doc.FirstChildElement("neighbors");
 
 	constexpr float BORDER_WIDTH = 50.0f;
 	constexpr float BORDER_HEIGHT = 50.0f;
